@@ -957,6 +957,8 @@ def detect_privesc(
         heimdall iam detect-privesc --baseline .heimdall-ignore
         heimdall iam detect-privesc --init-baseline
     """
+    import os
+
     # Handle --init-baseline
     if init_baseline:
         from heimdall.baseline import create_sample_baseline
@@ -1045,7 +1047,6 @@ def detect_privesc(
     
     # Check API key if --explain is requested
     if explain:
-        import os
         api_key_found = False
         
         if llm_provider == 'openai':
@@ -1092,8 +1093,8 @@ def detect_privesc(
         scanner = IAMScanner(profile_name=profile, region_name=region)
         
         # Show detected region
-        if not region and scanner.region:
-            console.print(f"[dim]Detected region:[/dim] {scanner.region}")
+        if not region and scanner.session.region_name:
+            console.print(f"[dim]Detected region:[/dim] {scanner.session.region_name}")
         
         with console.status("[bold green]Scanning IAM roles..."):
             roles = scanner.scan_roles()
