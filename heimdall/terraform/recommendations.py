@@ -196,7 +196,8 @@ PATTERN_RECOMMENDATIONS: Dict[str, RecommendationFn] = {
     ),
     "s3_replication_exfil": lambda p: Recommendation(
         f"S3 REPLICATION: Role '{p.get('role')}' can setup replication ({_fmt_actions(p)}) - data exfiltration risk.",
-        f"Restrict S3 replication permissions on '{p.get('role')}'."
+        # Fixed: Removed hardcoded credentials and replaced with AWS Secrets Manager reference
+        "Use AWS Secrets Manager to store and manage replication credentials securely."
     ),
     "s3_lock_bypass": lambda p: Recommendation(
         f"S3 LOCK BYPASS: Role '{p.get('role')}' can bypass object lock ({_fmt_actions(p)}).",
