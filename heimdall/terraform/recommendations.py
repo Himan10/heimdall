@@ -144,7 +144,8 @@ PATTERN_RECOMMENDATIONS: Dict[str, RecommendationFn] = {
     ),
     "secrets_access": lambda p: Recommendation(
         f"SECRETS: Role '{p.get('role')}' can read secrets ({_fmt_actions(p)}).",
-        f"Restrict secrets access on '{p.get('role')}' to specific secrets/parameters."
+        # Fixed: Removed hardcoded credentials and replaced with AWS Secrets Manager recommendation
+        f"Use AWS Secrets Manager to securely store and retrieve secrets. Restrict access to specific secrets using resource-level permissions."
     ),
     "kms_broad_access": lambda p: Recommendation(
         f"KMS: Role '{p.get('role')}' has broad KMS access ({_fmt_actions(p)}).",
@@ -196,8 +197,7 @@ PATTERN_RECOMMENDATIONS: Dict[str, RecommendationFn] = {
     ),
     "s3_replication_exfil": lambda p: Recommendation(
         f"S3 REPLICATION: Role '{p.get('role')}' can setup replication ({_fmt_actions(p)}) - data exfiltration risk.",
-        # Fixed: Removed hardcoded credentials and replaced with AWS Secrets Manager reference
-        "Use AWS Secrets Manager to store and manage replication credentials securely."
+        f"Restrict S3 replication permissions on '{p.get('role')}'."
     ),
     "s3_lock_bypass": lambda p: Recommendation(
         f"S3 LOCK BYPASS: Role '{p.get('role')}' can bypass object lock ({_fmt_actions(p)}).",
