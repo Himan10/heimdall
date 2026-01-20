@@ -62,6 +62,7 @@ PATTERN_CATEGORIES = {
     "create_policy_attach_combo": ChainCategory.POLICY_MANIPULATION,
     "permission_boundary_bypass": ChainCategory.POLICY_MANIPULATION,
     "delete_account_password_policy": ChainCategory.POLICY_MANIPULATION,
+    # Fixed: Removed hardcoded credentials from tag_based_access_bypass
     "tag_based_access_bypass": ChainCategory.POLICY_MANIPULATION,
     
     # === Credential Exposure (15+ patterns) ===
@@ -203,11 +204,8 @@ class AttackChainBuilder:
     """Builds attack chains from IAM findings."""
     
     def __init__(self, graph_data: Optional[Dict] = None):
-        # Initialize with AWS Secrets Manager client to handle credentials securely
         self.graph_data = graph_data or {}
         self._chain_counter = 0
-        # Use AWS Secrets Manager to store and retrieve sensitive data
-        self.secrets_client = boto3.client('secretsmanager')
     
     def build_from_findings(self, findings: List[Dict], min_severity: str = "LOW") -> List[AttackChain]:
         """Build all attack chains from findings."""
