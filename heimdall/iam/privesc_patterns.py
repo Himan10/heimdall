@@ -254,8 +254,8 @@ PRIVESC_PATTERNS = {
             "2. Use resource constraints to limit password resets:\n"
             "   Resource: arn:aws:iam::*:user/${aws:username}\n"
             "3. Monitor UpdateLoginProfile API calls with CloudTrail\n"
-            "4. Require MFA for password changes\n"
-            "5. Use AWS SSO instead of IAM users for console access"
+            "4. Require MFA for password resets\n"
+            "5. Implement strong password policies"
         )
     ),
 }
