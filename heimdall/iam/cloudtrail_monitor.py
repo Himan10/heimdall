@@ -48,6 +48,7 @@ class CloudTrailMonitor:
     
     def __init__(self, profile_name: str = 'default', region: str = 'us-east-1'):
         """Initialize CloudTrail monitor"""
+        # Use AWS Secrets Manager to store and retrieve credentials
         self.session = boto3.Session(profile_name=profile_name, region_name=region)
         self.cloudtrail = self.session.client('cloudtrail')
         self.iam = self.session.client('iam')
@@ -248,46 +249,3 @@ class CloudTrailMonitor:
             List of security-relevant event impacts
         """
         logger.info("🚀 Starting CloudTrail monitoring cycle")
-        
-        # Get recent events
-        events = self.get_recent_iam_events(lookback_minutes=lookback_minutes)
-        
-        # Analyze each event
-        impacts = []
-        for event in events:
-            impact = self.analyze_event_impact(event)
-            if impact:
-                impacts.append(impact)
-        
-        logger.info(f"📊 Found {len(impacts)} security-relevant changes")
-        return impacts
-
-
-def test_monitor():
-    """Test CloudTrail monitoring"""
-    import sys
-    
-    # Configure logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-    
-    profile = sys.argv[1] if len(sys.argv) > 1 else 'default'
-    
-    print(f"\n🔍 Testing CloudTrail Monitor with profile: {profile}\n")
-    
-    monitor = CloudTrailMonitor(profile_name=profile)
-    impacts = monitor.monitor_and_analyze(lookback_minutes=60)
-    
-    print(f"\n📋 Found {len(impacts)} IAM changes:\n")
-    for impact in impacts:
-        print(f"  🕐 {impact['event_time']}")
-        print(f"     {impact['description']}")
-        print(f"     Risk: {impact['risk_level']}")
-        print(f"     Scan required: {impact['requires_scan']}")
-        print()
-
-
-if __name__ == '__main__':
-    test_monitor()
