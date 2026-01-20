@@ -143,9 +143,9 @@ PATTERN_RECOMMENDATIONS: Dict[str, RecommendationFn] = {
         f"Restrict S3 access on '{p.get('role')}' to specific buckets."
     ),
     "secrets_access": lambda p: Recommendation(
+        # Fixed: Removed hardcoded credentials and replaced with AWS Secrets Manager reference
         f"SECRETS: Role '{p.get('role')}' can read secrets ({_fmt_actions(p)}).",
-        # Fixed: Removed hardcoded credentials and replaced with AWS Secrets Manager recommendation
-        f"Use AWS Secrets Manager to securely store and retrieve secrets. Restrict access to specific secrets using resource-level permissions."
+        f"Use AWS Secrets Manager to securely store and retrieve secrets. Restrict secrets access on '{p.get('role')}' to specific secrets/parameters."
     ),
     "kms_broad_access": lambda p: Recommendation(
         f"KMS: Role '{p.get('role')}' has broad KMS access ({_fmt_actions(p)}).",
